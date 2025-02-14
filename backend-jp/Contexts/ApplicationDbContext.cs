@@ -19,6 +19,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Degree> Degrees { get; set; }
 
+    public virtual DbSet<Friend> Friends { get; set; }
+
     public virtual DbSet<Job> Jobs { get; set; }
 
     public virtual DbSet<JobEmployer> JobEmployers { get; set; }
@@ -49,9 +51,7 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Work> Works { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=jobpreppers.cbgwos8q0ls4.us-east-2.rds.amazonaws.com;database=JobPreppersDB;port=3306;user id=JobPrepper;password=ILoveCanes2025!;sslmode=None", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.39-mysql"));
+    
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -66,6 +66,30 @@ public partial class ApplicationDbContext : DbContext
             entity.ToTable("Degree");
 
             entity.Property(e => e.degree_name).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<Friend>(entity =>
+        {
+            entity.HasKey(e => e.id).HasName("PRIMARY");
+
+            entity.HasIndex(e => e.friendID, "friendID");
+
+            entity.HasIndex(e => new { e.userID, e.friendID }, "userID").IsUnique();
+
+            entity.Property(e => e.created_at)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp");
+            entity.Property(e => e.status)
+                .HasDefaultValueSql("'pending'")
+                .HasColumnType("enum('pending','accepted','rejected')");
+
+            entity.HasOne(d => d.friend).WithMany(p => p.Friendfriends)
+                .HasForeignKey(d => d.friendID)
+                .HasConstraintName("Friends_ibfk_2");
+
+            entity.HasOne(d => d.user).WithMany(p => p.Friendusers)
+                .HasForeignKey(d => d.userID)
+                .HasConstraintName("Friends_ibfk_1");
         });
 
         modelBuilder.Entity<Job>(entity =>

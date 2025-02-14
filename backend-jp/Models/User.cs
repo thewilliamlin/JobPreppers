@@ -25,6 +25,10 @@ public partial class User
 
     public string? location { get; set; }
 
+    public virtual ICollection<Friend> Friendfriends { get; set; } = new List<Friend>();
+
+    public virtual ICollection<Friend> Friendusers { get; set; } = new List<Friend>();
+
     public virtual ICollection<Resume> Resumes { get; set; } = new List<Resume>();
 
     public virtual ICollection<UserEducation> UserEducations { get; set; } = new List<UserEducation>();
