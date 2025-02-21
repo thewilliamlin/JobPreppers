@@ -1,10 +1,16 @@
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DialogContent, Input, InputLabel, TextField } from "@mui/material";
-import { Fragment, useEffect } from "react";
+import {
+  DialogContent,
+  Input,
+  InputLabel,
+  TextField,
+  createTheme,
+  ThemeProvider,
+} from "@mui/material";
+import { useEffect } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import ToggleButtonForm from "../Helper/ToggleButtonForm";
 import dayjs from "dayjs";
 import styles from "../Posting.module.css";
 import { errorMessage } from "../Helper/ErrorMessage";
@@ -34,6 +40,21 @@ export default function ApplicationProcess() {
     "Job Prepper Profile",
   ];
 
+  const newTheme = (theme) =>
+    createTheme({
+      ...theme,
+      components: {
+        MuiDayCalendar: {
+          styleOverrides: {
+            root: {
+              maxHeight: 200,
+              overflow: "auto",
+            },
+          },
+        },
+      },
+    });
+
   return (
     <>
       <DialogContent>
@@ -41,32 +62,42 @@ export default function ApplicationProcess() {
           <div className={styles.inputField}>
             <h2>Posting Date</h2>
             <div className={styles.twoGrid}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Controller
-                  name="postDate"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      {...field}
-                      label="Post Day"
-                      value={field.value ? dayjs(field.value) : null} // Ensure it's in Dayjs format
-                    />
-                  )}
-                />
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Controller
-                  name="endDate"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      {...field}
-                      label="Apply By Day"
-                      value={field.value ? dayjs(field.value) : null} // Ensure it's in Dayjs format
-                    />
-                  )}
-                />
-              </LocalizationProvider>
+              <ThemeProvider theme={newTheme}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Controller
+                    name="postDate"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        {...field}
+                        label="Post Day"
+                        value={field.value ? dayjs(field.value) : null} // Ensure it's in Dayjs format
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Controller
+                    name="endDate"
+                    control={control}
+                    render={({ field }) => (
+                      <DatePicker
+                        {...field}
+                        label="Apply By Day"
+                        value={field.value ? dayjs(field.value) : null} // Ensure it's in Dayjs format
+                        // slotProps={{
+                        //   layout: {
+                        //     sx: {
+                        //       maxHeight: 200,
+                        //       overflow: "auto",
+                        //     },
+                        //   },
+                        // }}
+                      />
+                    )}
+                  />
+                </LocalizationProvider>
+              </ThemeProvider>
             </div>
             <div className={styles.twoGrid}>
               {errorMessage(errors.postDate) ? (

@@ -1,10 +1,12 @@
 import { useFormContext } from "react-hook-form";
-import { DialogContent, TextField } from "@mui/material";
+import { DialogContent, TextField, IconButton } from "@mui/material";
 import AutoCompleteForm from "../Helper/AutoCompleteForm";
 import styles from "../Posting.module.css";
-import { TextareaAutosize } from "@mui/base/TextareaAutosize";
 import { errorMessage } from "../Helper/ErrorMessage";
 import axios from "axios";
+import TipTap from "../Helper/TipTap";
+import React, { useCallback } from "react";
+
 export default function DescribeJob({ formData, setFormData }) {
   const jobForm = useFormContext();
   const onSubmit = (data) => {
@@ -16,6 +18,7 @@ export default function DescribeJob({ formData, setFormData }) {
     register,
     handleSubmit,
     setValue,
+    watch,
     control,
     formState: { errors },
   } = jobForm;
@@ -90,13 +93,21 @@ export default function DescribeJob({ formData, setFormData }) {
                         const location = e.target.value;
                         try {
                           if (location) {
-                            const { lat, lon } = await submitAddress(location);
-                            console.log("Fetched coordinates:", lat, lon);
-                            if (lat && lon) {
-                              setValue("latitude", lat);
-                              setValue("longitude", lon);
+                            let lower = location.toLowerCase();
+                            if (lower.match("remote")) {
+                              setValue("latitude", null);
+                              setValue("longitude", null);
                             } else {
-                              alert("Please enter a correct location");
+                              const { lat, lon } = await submitAddress(
+                                location
+                              );
+                              console.log("Fetched coordinates:", lat, lon);
+                              if (lat && lon) {
+                                setValue("latitude", lat);
+                                setValue("longitude", lon);
+                              } else {
+                                alert("Please enter a correct location");
+                              }
                             }
                           }
                         } catch (e) {
@@ -121,18 +132,14 @@ export default function DescribeJob({ formData, setFormData }) {
               </div>
             </div>
 
-          <label for="description" className={`${styles.label} mt-[10px]`}>
-            Job Description *
-          </label>
-          <TextareaAutosize
-            {...register("description")}
-            required
-            label="Job Description"
-            placeholder="Enter Job Description"
-          />
-          {errorMessage(errors.description)}
+            <label for="description" className={`${styles.label} mt-[10px]`}>
+              Job Description *
+            </label>
+            <div className={styles.textEditorContainer}>
+              <TipTap control={control} name="description"></TipTap>
+            </div>
+            {errorMessage(errors.description)}
           </div>
-
         </form>
       </DialogContent>
     </>

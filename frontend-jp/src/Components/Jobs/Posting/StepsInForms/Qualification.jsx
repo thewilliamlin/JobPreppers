@@ -61,9 +61,7 @@ export default function Qualification() {
           }
         );
         const response = await skillResponse.json();
-        const skillList = response.data.map((option) => ({
-          label: option.name,
-        }));
+        const skillList = response.data.map((option) => option.name);
         setSkills(skillList);
       }
     } catch (error) {
@@ -95,7 +93,6 @@ export default function Qualification() {
   const jobForm = useFormContext();
   const {
     register,
-    handleSubmit,
     control,
     resetField,
     formState: { errors },
@@ -104,96 +101,106 @@ export default function Qualification() {
 
   return (
     <>
-        <div className={styles.input}>
-          <div className={styles.inputField}>
-            <h2>Education Level</h2>
-            <AutoCompleteForm
-              name="education"
-              label="Education Level *"
-              options={educationOptions}
-              control={control}
-            />
-            {errorMessage(errors.education)}
-          </div>
-        </div>
-
+      <div className={styles.input}>
         <div className={styles.inputField}>
-          <h2>Number of Years of Experience Necessary</h2>
-          <div className={styles.twoGrid}>
-            <TextField
-              required
-              id="experienceStartingRange"
-              type="number"
-              label="Starting Range"
-              {...register("minimumExperience", { valueAsNumber: true })}
-            />
-            <TextField
-              id="experienceEnding"
-              type="number"
-              label="Ending Range"
-              {...register("maximumExperience", { valueAsNumber: true })}
-            />
-          </div>
-          <div className={styles.twoGrid}>
-          {errorMessage(errors.minimumExperience)?errorMessage(errors.minimumExperience):<div/>}
-
-</div>
-        </div>
-
-        <div className={styles.inputField}>
-          <h2>Required Skills</h2>
-          <Controller
+          <h2>Education Level</h2>
+          <AutoCompleteForm
+            name="education"
+            label="Education Level *"
+            options={educationOptions}
             control={control}
-            name="skills"
+          />
+          {errorMessage(errors.education)}
+        </div>
+      </div>
+
+      <div className={styles.inputField}>
+        <h2>Number of Years of Experience Necessary</h2>
+        <div className={styles.twoGrid}>
+          <TextField
+            required
+            id="experienceStartingRange"
+            type="number"
+            label="Starting Range"
+            {...register("minimumExperience", { valueAsNumber: true })}
+          />
+          <TextField
+            id="experienceEnding"
+            type="number"
+            label="Ending Range"
+            {...register("maximumExperience", { valueAsNumber: true })}
+          />
+        </div>
+        <div className={styles.twoGrid}>
+          {errorMessage(errors.minimumExperience) ? (
+            errorMessage(errors.minimumExperience)
+          ) : (
+            <div />
+          )}
+        </div>
+      </div>
+
+      <div className={styles.inputField}>
+        <h2>Required Skills</h2>
+        <Controller
+          control={control}
+          name="skills"
+          render={({ field }) => (
+            <Autocomplete
+              {...field}
+              multiple
+              freeSolo
+              autoSelect
+              options={skills}
+              value={field.value}
+              onChange={(_, value) => {
+                field.onChange(value);
+              }}
+              getOptionLabel={(option) =>
+                (typeof option === "object" ? option.label : option) || ""
+              }
+              // getOptionLabel={(option) => option.label || ""} // Adjust based on API response
+              onInputChange={(event, newInputValue) => {
+                if (newInputValue.length > 1) {
+                  fetchSkills(newInputValue);
+                }
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Search Skills *" />
+              )}
+            />
+          )}
+        />
+        {errorMessage(errors.skills)}
+      </div>
+
+      <div className={styles.inputField}>
+        <h2>Ask these questions to the applicant?</h2>
+        <FormGroup>
+          <Controller
+            name="workVisaRequired"
+            defaultValue={false}
+            control={control}
             render={({ field }) => (
-              <Autocomplete
-                {...field}
-                multiple
-                options={skills}
-                value={field.value}
-                onChange={(_, value) => field.onChange(value)}
-                getOptionLabel={(option) => option.label || ""} // Adjust based on API response
-                onInputChange={(event, newInputValue) => {
-                  if (newInputValue.length > 1) {
-                    fetchSkills(newInputValue);
-                  }
-                }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Search Skills *" />
-                )}
+              <FormControlLabel
+                control={<Checkbox {...field} checked={field.value} />}
+                label="Will you require a work visa or sponsorship now or later in the future?"
               />
             )}
           />
-          {errorMessage(errors.skills)}
-        </div>
-
-        <div className={styles.inputField}>
-          <h2>Ask these questions to the applicant?</h2>
-          <FormGroup>
-            <Controller
-              name="workVisaRequired"
-              defaultValue={false}
-              control={control}
-              render={({ field }) => (
-                <FormControlLabel
-                  control={<Checkbox {...field} checked={field.value} />}
-                  label="Will you require a work visa or sponsorship now or later in the future?"
-                />
-              )}
-            />
-            <Controller
-              name="authorizedToWork"
-              defaultValue={false}
-              control={control}
-              render={({ field }) => (
-                <FormControlLabel
-                  control={<Checkbox {...field} checked={field.value} />}
-                  label="Are you legally authorized to work in the USA"
-                />
-              )}
-            />
-          </FormGroup>
-        </div>
+          <Controller
+            name="authorizedToWork"
+            defaultValue={false}
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                control={<Checkbox {...field} checked={field.value} />}
+                label="Are you legally authorized to work in the USA"
+              />
+            )}
+          />
+        </FormGroup>
+      </div>
     </>
   );
 }

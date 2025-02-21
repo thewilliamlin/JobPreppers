@@ -42,6 +42,7 @@ namespace JobPreppersDemo.Controllers
             public string title { get; set; } = string.Empty;
             public string type { get; set; } = string.Empty;
             public string location { get; set; } = string.Empty;
+            public string description { get; set; } = string.Empty;
 
         }
 
@@ -219,9 +220,9 @@ namespace JobPreppersDemo.Controllers
                 var distance = request.Distance * 1609.34;
                 query = _context.JobPosts.FromSqlInterpolated(
                     $@"
-                    SELECT jp.* FROM JobPosts jp
+                    SELECT jp.* FROM JobPosts jp,
                     JOIN JobLocations l on jp.locationID = l.locationID
-                    WHERE ST_Distance_Sphere(Point({request.Longitude}, {request.Latitude}), Point(l.longitude, l.latitude)) <= {distance}"
+                    WHERE (LOWER(l.name) REGEXP 'remote') OR ST_Distance_Sphere(Point({request.Longitude}, {request.Latitude}), Point(l.longitude, l.latitude)) <= {distance}"
                 ).Include(job => job.employer)
                 .Include(job => job.location)
                 .Select(job => new JobPostDto
@@ -232,7 +233,8 @@ namespace JobPreppersDemo.Controllers
                     endDate = job.endDate,
                     title = job.title,
                     type = job.type,
-                    location = job.location.name
+                    location = job.location.name,
+                    description = job.description
 
                 });
 
@@ -251,7 +253,8 @@ namespace JobPreppersDemo.Controllers
                     endDate = job.endDate,
                     title = job.title,
                     type = job.type,
-                    location = job.location.name
+                    location = job.location.name,
+                    description = job.description
 
                 });
 

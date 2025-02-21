@@ -87,13 +87,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  align-items: center;
   flex-direction: row;
   width: 100%;
   gap: 10px;
 }
 
 .searchTextField {
-  margin-top: 2rem;
   background-color: white;
   width: 40%;
 }
@@ -171,4 +171,34 @@
 
 .cardCompensation {
   border: 2px solid #63d297;
+}
+
+.noResultContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+
+img {
+  background-color: transparent;
+  height: 30rem;
+  width: 30rem;
+}
+
+/* .resetButton {
+  background-color: #4ba173;
+} */
+
+.containerForCard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+.resultText {
+  display: flex;
+  justify-self: self-start;
+  width: 100%;
+  padding: 0 0.2rem 0 0;
 }

@@ -47,17 +47,18 @@ export const qualificationSchema = yup.object({
     .nullable()
     .moreThan(yup.ref("minimumExperience"), "Maximum Experience needs to be more than the minimum salary."),
     skills : yup.array().of(
-        yup.object().shape({
-        label: yup.string().required(),
-    })).min(1, "Skills is required, please select atleast one")
+        yup.string().required(),
+    ).min(1, "Skills is required, please select atleast one")
 
     
     
 })
-
+const currentDate = new Date();
 //Step 4
 export const applicationProcessSchema = yup.object({
+    
     postDate : yup.date()
+    .min(currentDate, "Date must be greater than the current date")
     .required("Post Date is required"),
 
     endDate : yup.date()

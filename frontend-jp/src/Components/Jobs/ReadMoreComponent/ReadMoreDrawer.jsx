@@ -1,10 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
+import ReactMarkdown from "react-markdown";
 import {
   Drawer,
   Box,
   Typography,
   Divider,
-  Chip,
   Stack,
   Card,
   CardContent,
@@ -15,6 +15,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import PlaceIcon from "@mui/icons-material/Place";
 import "./ReadMoreStyle.css";
 import styles from "../Jobs.module.css";
+import DOMPurify from "dompurify";
 
 export default function ReadMoreDrawer({ open, job, onClose }) {
   const [isNarrow, setIsNarrow] = useState(window.innerWidth < 1200); // Initial state based on window width
@@ -30,6 +31,21 @@ export default function ReadMoreDrawer({ open, job, onClose }) {
   }, []);
 
   const drawerWidth = isNarrow ? "100%" : "600px";
+
+  const sanitizeDescription = (description) => {
+    console.log("Description:", job.description);
+    console.log("Type of description:", typeof job.description);
+
+    if (typeof description === "string") {
+      try {
+        const decodedDescription = JSON.parse(description);
+        return DOMPurify.sanitize(decodedDescription);
+      } catch (e) {
+        return DOMPurify.sanitize(description);
+      }
+    }
+    return "No description provided";
+  };
 
   if (!job) return null;
 
@@ -136,9 +152,12 @@ export default function ReadMoreDrawer({ open, job, onClose }) {
         ) : null}
         <Box>
           <Typography className="start-text"> Job Description</Typography>
-          <Typography sx={{ typography: "body1" }}>
-            {job.description || "No description provided."}
-          </Typography>
+          <Typography
+            sx={{ typography: "body1", whiteSpace: "pre-line" }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeDescription(job.description),
+            }}
+          ></Typography>
         </Box>
       </Box>
     </Drawer>

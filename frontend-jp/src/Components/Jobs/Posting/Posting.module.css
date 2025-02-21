@@ -23,92 +23,108 @@
   color: #085630 !important;
 }
 
-  .dialogContent {
-    display: flex;
-    flex-direction: row;
-    column-gap: 50px;
-    width: 100%;
-    overflow-x: hidden;
-  }
-  
-  .dialogContentLeft{
-    flex: 1;
-  }
-  
-  .dialogContentRight {
-    flex: 1;
-    height: 100%;
-  }
+.dialogContent {
+  display: flex;
+  flex-direction: row;
+  column-gap: 50px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.dialogContentLeft {
+  flex: 1;
+}
+
+.dialogContentRight {
+  flex: 1;
+  height: 100%;
+}
 
 .required::after {
   content: " *";
   color: red;
 }
 
-  .input {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 10px;
-    justify-content: space-between;
-    width: 100%;
-  }
+.input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 10px;
+  justify-content: space-between;
+  width: 100%;
+}
 
-  .inputField {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100% !important;
-  }
+.inputField {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100% !important;
+}
 
-  .label{
-    color: #4ba173;
-    font-family: 'Roboto', sans-serif;
-    font-size: rem;
-  }
+.label {
+  color: #4ba173;
+  font-family: "Roboto", sans-serif;
+  font-size: rem;
+}
 
-  .expectedPay{
-    border: solid 2px #e5e7eb;
-    padding: 20px;
-    width: 100%;
-  }
+.expectedPay {
+  border: solid 2px #e5e7eb;
+  padding: 20px;
+  width: 100%;
+}
 
-  .payRangeDetails{
-    display: grid;
-    grid-auto-flow: row;
-    gap: 10px;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+.payRangeDetails {
+  display: grid;
+  grid-auto-flow: row;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
 
-  .payExactDetails{
-    display: grid;
-    grid-auto-flow: column;
-    gap: 10px;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+.payExactDetails {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 10px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
 
-  .twoGrid{
-    display: grid;
-    grid-auto-flow: column;
-    gap: 10px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%;
-  }
+.twoGrid {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+}
 
-  .rateLabel {
-    color: #4ba173;
-    border: 1px solid #4ba173;
-    padding: 16px 16px;
-    border-radius: 4px;
-    display: inline-block;
-    font-family: "Roboto", sans-serif;
-  }
-  
-  .error {
-    color: red;
-    display: flex;
-    justify-content: start;
-    width: 100%;
-    gap: 3px;
-  }
-  
+.rateLabel {
+  color: #4ba173;
+  border: 1px solid #4ba173;
+  padding: 16px 16px;
+  border-radius: 4px;
+  display: inline-block;
+  font-family: "Roboto", sans-serif;
+}
+
+.error {
+  color: red;
+  display: flex;
+  justify-content: start;
+  width: 100%;
+  gap: 3px;
+}
+
+/* .textEditorContainer {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #4ba173;
+  min-height: 15rem;
+  /* padding: 0.5rem 0 0 0.2rem; */
+/* } */
+
+.MuiYearPicker-root {
+  max-height: 200px !important;
+  /* position: fixed !important; */
+}
+
+.MuiPaper-root {
+  overflow: visible;
+}

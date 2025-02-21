@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Box, Button } from "@mui/material";
+import React, { useState } from "react";
+import { Box } from "@mui/material";
 import SearchColumn from "../Components/Jobs/SearchColumn";
 import "../Components/JobPreppers.css";
 import styles from "../Components/Jobs/Jobs.module.css";
 import FilterColumn from "../Components/Jobs/FilterColumn";
 import JobDescription from "../Components/Jobs/JobDescription";
 import ReadMore from "../Components/Jobs/ReadMoreComponent/ReadMoreDrawer";
+import NoResultPage from "../Components/Jobs/Posting/NoResultPage";
 
 function Jobs() {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -27,26 +28,26 @@ function Jobs() {
     longitude: null,
   });
 
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/jobpost");
-        const contentType = res.headers.get("Content-Type");
-        if (contentType && contentType.includes("application/json")) {
-          const data = await res.json();
-          console.log("Data:", data);
-          console.log("Data Jobs:", data.jobs);
-          setJobs(data.jobs);
-        } else {
-          console.error("Expected JSON, but got:", contentType);
-        }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchJobs = async () => {
+  //     try {
+  //       const res = await fetch("http://localhost:5000/api/jobpost");
+  //       const contentType = res.headers.get("Content-Type");
+  //       if (contentType && contentType.includes("application/json")) {
+  //         const data = await res.json();
+  //         console.log("Data:", data);
+  //         console.log("Data Jobs:", data.jobs);
+  //         setJobs(data.jobs);
+  //       } else {
+  //         console.error("Expected JSON, but got:", contentType);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching jobs:", error);
+  //     }
+  //   };
 
-    fetchJobs();
-  }, []);
+  //   fetchJobs();
+  // }, []);
   return (
     <>
       <Box className={styles.jobs}>
@@ -70,8 +71,16 @@ function Jobs() {
                 setFilters={setFilters}
                 userCoordinate={userCoordinate}
               />
+
+              {}
             </div>
-            <JobDescription setDrawerOpen={setDrawerOpen} jobs={jobs} />
+            {jobs.length > 0 ? (
+              <div className={styles.containerForCard}>
+                <JobDescription setDrawerOpen={setDrawerOpen} jobs={jobs} />
+              </div>
+            ) : (
+              <NoResultPage />
+            )}
           </div>
         </Box>
 
