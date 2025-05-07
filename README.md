@@ -12,6 +12,8 @@ Job Preppers is a platform for job seekers and recruiters to connect. The applic
 ### Please visit https://jobpreppers.co for the deployed version! :)
 If the website is down, please email anyone on the Job Preppers team and we can turn it back on.
 
+### View our video demo on Youtube at https://youtu.be/bVfJ45MNk7s?si=alrpFISauebTMYWt
+
 
 ## How to run the application locally
 NOTE: As we have user secrets and API keys, if you want to run our application locally, please email anyone on our team.
@@ -34,7 +36,6 @@ npm run start
 
 ### Backend:
 ```
-
 2. In a separate terminal, run these commands to start the backend server
 cd job-preppers/backend-jp
 dotnet build
